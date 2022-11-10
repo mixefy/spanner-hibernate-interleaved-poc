@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: com.google.cloud.spanner.jdbc.JdbcDriver
+    url: "jdbc:cloudspanner:/projects/{YOUR_PROJECT_ID}/instances/poc/databases/spanner-hibernate-poc" # replace this url
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect: com.google.cloud.spanner.hibernate.SpannerDialect
+    show-sql: true
