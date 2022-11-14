@@ -4,6 +4,7 @@ import com.google.cloud.spanner.hibernate.Interleaved
 import org.hibernate.annotations.Type
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.data.jpa.repository.JpaRepository
 import java.time.Instant
 import java.util.*
 import javax.persistence.*
@@ -16,13 +17,12 @@ fun main(args: Array<String>) {
 }
 
 @Entity
-@Suppress("LongParameterList")
 class Request(
 
     var commandLine: String,
 
     @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
-    @JoinColumn(name = "requestId", nullable = false)
+    @JoinColumn(name = "requestId", nullable = false, updatable = false)
     var executionAttempts: MutableList<ExecutionAttempt> = mutableListOf(),
 
     @Id
@@ -44,3 +44,8 @@ class ExecutionAttempt(
     @Type(type = "uuid-char")
     var attemptId: UUID? = null,
 )
+
+interface RequestRepository : JpaRepository<Request, UUID> {
+
+    fun findByCommandLine(commandLine: String): Request?
+}
